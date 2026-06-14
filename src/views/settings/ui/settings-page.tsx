@@ -1,7 +1,19 @@
-import Link from "next/link";
-import { buttonStyles } from "@/shared/ui";
+import { getSession } from "@/shared/lib/auth/session";
+import { getSupabaseAdmin } from "@/shared/lib/supabase/server";
+import { logoutAction } from "@/features/auth";
 
-export function SettingsPage() {
+export async function SettingsPage() {
+  const session = await getSession();
+  let familyName = "—";
+  if (session) {
+    const { data } = await getSupabaseAdmin()
+      .from("families")
+      .select("name")
+      .eq("id", session.familyId)
+      .single();
+    familyName = data?.name ?? "—";
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-semibold tracking-tight">Настройки</h1>
@@ -9,30 +21,26 @@ export function SettingsPage() {
       <section className="flex flex-col gap-3 rounded-2xl border border-ink/10 p-4">
         <div className="flex flex-col gap-1">
           <span className="text-sm font-semibold uppercase tracking-wide text-ink/50">Семья</span>
-          <span className="text-lg">Наша семья</span>
+          <span className="text-lg">{familyName}</span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-sm font-semibold uppercase tracking-wide text-ink/50">Код доступа</span>
-          <div className="flex items-center gap-3">
-            <code className="rounded-lg bg-ink/5 px-3 py-1.5 font-mono tracking-widest">••••••••</code>
-            <button type="button" className="text-sm font-medium text-terracotta hover:underline">
-              Показать
-            </button>
-          </div>
-          <p className="text-xs text-ink/50">Поделись названием и кодом с близкими, чтобы они вошли в эту семью.</p>
+          <p className="text-sm text-ink/70">
+            Код хранится в зашифрованном виде, посмотреть его нельзя. Поделитесь названием
+            семьи и кодом с близкими, чтобы они вошли. Если код утерян — сменить его можно
+            будет позже (добавим в следующих шагах).
+          </p>
         </div>
       </section>
 
-      <div className="flex flex-col gap-2">
-        <button type="button" className={buttonStyles("outline")}>
-          Сменить код доступа
-        </button>
-        <Link href="/login" className={buttonStyles("ghost")}>
+      <form action={logoutAction}>
+        <button
+          type="submit"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full border border-ink/20 px-5 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/5"
+        >
           Выйти
-        </Link>
-      </div>
-
-      <p className="text-center text-xs text-ink/45">Демо. На этапе 1 — реальная семья и код.</p>
+        </button>
+      </form>
     </div>
   );
 }

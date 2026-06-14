@@ -1,7 +1,5 @@
-import Link from "next/link";
-import { TextField, buttonStyles } from "@/shared/ui";
+import { AuthForm } from "@/features/auth";
 
-// Заготовка входа. Логика авторизации семьи — на этапе 1.
 export function LoginPage() {
   return (
     <main className="flex min-h-full flex-1 flex-col items-center justify-center px-5 py-12">
@@ -14,23 +12,10 @@ export function LoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight">Семейные рецепты</h1>
-          <p className="text-sm text-ink/55">Войди в свою семью по названию и коду</p>
+          <p className="text-sm text-ink/55">Создайте свою семью или присоединитесь к существующей</p>
         </div>
 
-        <form className="flex flex-col gap-4">
-          <TextField label="Название семьи" placeholder="Наша семья" />
-          <TextField label="Код доступа" placeholder="••••••••" />
-          <Link href="/" className={buttonStyles("primary")}>
-            Войти
-          </Link>
-        </form>
-
-        <div className="flex items-center justify-center gap-1.5 text-sm">
-          <span className="text-ink/55">Ещё нет семьи?</span>
-          <button type="button" className="font-medium text-terracotta hover:underline">
-            Создать новую
-          </button>
-        </div>
+        <AuthForm />
       </div>
     </main>
   );
