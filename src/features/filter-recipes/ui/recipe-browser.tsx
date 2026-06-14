@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { RecipeCard } from "@/entities/recipe";
 import type { MealType, Recipe } from "@/entities/recipe";
+import { buttonStyles } from "@/shared/ui";
 import { TagMultiSelect } from "./tag-multi-select";
 
 const mealOptions: { value: "" | MealType; label: string }[] = [
@@ -21,11 +23,11 @@ const timeOptions: { value: string; label: string }[] = [
 ];
 
 const selectClass =
-  "h-11 flex-1 rounded-xl border border-ink/15 bg-cream px-3 text-sm outline-none focus:border-terracotta";
+  "h-11 flex-1 rounded-xl border border-ink/15 bg-cream px-3 text-base outline-none focus:border-terracotta";
 
 function matchesTime(value: string, minutes?: number): boolean {
   if (value === "any") return true;
-  if (minutes == null) return false; // фильтр по времени активен → блюда без времени скрываем
+  if (minutes == null) return false;
   if (value === "60+") return minutes > 60;
   return minutes <= Number(value);
 }
@@ -71,7 +73,7 @@ export function RecipeBrowser({ recipes }: { recipes: Recipe[] }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Поиск по названию…"
-        className="h-11 w-full rounded-full border border-ink/15 bg-cream px-4 text-sm outline-none placeholder:text-ink/40 focus:border-terracotta"
+        className="h-11 w-full rounded-full border border-ink/15 bg-cream px-4 text-base outline-none placeholder:text-ink/40 focus:border-terracotta"
       />
 
       <div className="flex flex-col gap-2.5">
@@ -102,7 +104,15 @@ export function RecipeBrowser({ recipes }: { recipes: Recipe[] }) {
           </select>
         </div>
 
-        {allTags.length > 0 && <TagMultiSelect all={allTags} selected={tags} onChange={setTags} />}
+        <div className="flex items-center gap-2">
+          {allTags.length > 0 && (
+            <TagMultiSelect all={allTags} selected={tags} onChange={setTags} className="flex-1" />
+          )}
+          <Link href="/recipes/new" className={buttonStyles("primary", "ml-auto shrink-0")}>
+            <span className="text-base leading-none">＋</span>
+            Блюдо
+          </Link>
+        </div>
       </div>
 
       {filtered.length === 0 ? (

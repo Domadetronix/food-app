@@ -3,8 +3,9 @@ import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 export const fieldLabelClass =
   "text-sm font-semibold uppercase tracking-wide text-ink/50";
 
+// text-base (16px), чтобы iOS не зумил экран при фокусе на поле.
 export const inputClass =
-  "h-11 w-full rounded-xl border border-ink/15 bg-cream px-3.5 text-sm outline-none placeholder:text-ink/40 focus:border-terracotta";
+  "h-11 w-full rounded-xl border border-ink/15 bg-cream px-3.5 text-base outline-none placeholder:text-ink/40 focus:border-terracotta";
 
 function FieldLabel({ label, required }: { label: string; required?: boolean }) {
   return (
@@ -38,7 +39,7 @@ export function TextArea({
     <div className="flex flex-col gap-1.5">
       {label && <FieldLabel label={label} />}
       <textarea
-        className={`w-full resize-y rounded-xl border border-ink/15 bg-cream p-3.5 text-sm outline-none placeholder:text-ink/40 focus:border-terracotta ${className ?? ""}`}
+        className={`w-full resize-y rounded-xl border border-ink/15 bg-cream p-3.5 text-base outline-none placeholder:text-ink/40 focus:border-terracotta ${className ?? ""}`}
         {...props}
       />
     </div>

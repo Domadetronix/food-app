@@ -124,7 +124,8 @@ export async function saveRecipeAction(
 
   revalidatePath("/");
   revalidatePath(`/recipes/${recipeId}`);
-  redirect(`/recipes/${recipeId}`);
+  // После создания — на главную; после редактирования — обратно в карточку.
+  redirect(id ? `/recipes/${recipeId}` : "/");
 }
 
 /** Удаление рецепта (вместе с фото; продукты удаляются каскадом). */
