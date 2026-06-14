@@ -1,29 +1,23 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Button, TextField } from "@/shared/ui";
+import Link from "next/link";
+import { Button, TextField, buttonStyles } from "@/shared/ui";
 import { authAction, type AuthState } from "../api/actions";
 
 type Mode = "create" | "join";
 
-// Понятный код без похожих символов (0/O, 1/I и т.п.)
-function generateCode(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let result = "";
-  for (let i = 0; i < 10; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return result;
-}
-
 export function AuthForm() {
   const [mode, setMode] = useState<Mode>("create");
-  const [code, setCode] = useState("");
   const [state, formAction, pending] = useActionState<AuthState, FormData>(authAction, {});
+
+  // После создания семьи показываем код — его нельзя будет посмотреть позже.
+  if (state?.createdCode) {
+    return <CreatedPanel code={state.createdCode} />;
+  }
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Выбор: создать или присоединиться */}
       <div className="grid grid-cols-2 gap-1 rounded-full border border-ink/15 p-1">
         {(["create", "join"] as Mode[]).map((m) => (
           <button
@@ -42,42 +36,69 @@ export function AuthForm() {
       <form action={formAction} className="flex flex-col gap-4">
         <input type="hidden" name="mode" value={mode} />
 
-        <TextField label="Название семьи" name="name" placeholder="Наша семья" required />
-
-        <div className="flex flex-col gap-1.5">
-          <TextField
-            label="Код доступа"
-            name="code"
-            placeholder="••••••••"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            autoComplete={mode === "create" ? "new-password" : "current-password"}
-            required
-          />
-          {mode === "create" && (
-            <button
-              type="button"
-              onClick={() => setCode(generateCode())}
-              className="self-start text-sm font-medium text-terracotta hover:underline"
-            >
-              Сгенерировать надёжный код
-            </button>
-          )}
-        </div>
+        {mode === "create" ? (
+          <>
+            <TextField label="Название семьи" name="name" placeholder="Наша семья" required />
+            <p className="text-xs text-ink/50">
+              Код доступа сгенерируется автоматически и покажется после создания — сохраните
+              его и поделитесь с близкими.
+            </p>
+          </>
+        ) : (
+          <>
+            <TextField
+              label="Код доступа"
+              name="code"
+              placeholder="XXXXX-XXXXX"
+              autoComplete="off"
+              autoCapitalize="characters"
+              required
+            />
+            <p className="text-xs text-ink/50">Введите код семьи (регистр и дефис не важны).</p>
+          </>
+        )}
 
         {state?.error && <p className="text-sm text-terracotta">{state.error}</p>}
-
-        {mode === "create" && (
-          <p className="text-xs text-ink/50">
-            Сохраните код — посмотреть его позже нельзя (хранится в виде хеша), только сбросить.
-            Поделитесь названием и кодом с близкими, чтобы они вошли в семью.
-          </p>
-        )}
 
         <Button type="submit" disabled={pending} className="w-full">
           {pending ? "Подождите…" : mode === "create" ? "Создать семью" : "Войти"}
         </Button>
       </form>
+    </div>
+  );
+}
+
+function CreatedPanel({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center gap-5 text-center">
+      <div>
+        <h2 className="text-xl font-semibold tracking-tight">Семья создана!</h2>
+        <p className="mt-1 text-sm text-ink/55">Это код доступа вашей семьи</p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          navigator.clipboard?.writeText(code);
+          setCopied(true);
+        }}
+        className="w-full rounded-2xl border border-gold bg-gold/10 px-4 py-4 font-mono text-2xl font-semibold tracking-widest transition-colors hover:bg-gold/20"
+        title="Нажмите, чтобы скопировать"
+      >
+        {code}
+      </button>
+      <span className="text-xs text-ink/55">{copied ? "Скопировано ✓" : "Нажмите на код, чтобы скопировать"}</span>
+
+      <p className="text-xs text-ink/50">
+        Сохраните код и поделитесь им с близкими — по нему они войдут в семью. Посмотреть его
+        позже нельзя (хранится в виде хеша).
+      </p>
+
+      <Link href="/" className={buttonStyles("primary", "w-full")}>
+        Перейти в приложение
+      </Link>
     </div>
   );
 }
