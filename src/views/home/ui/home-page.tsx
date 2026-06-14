@@ -1,7 +1,14 @@
+import Link from "next/link";
+import { getSession } from "@/shared/lib/auth/session";
+import { getFamilyRecipes } from "@/entities/recipe/api/queries";
+import { RecipeCard } from "@/entities/recipe";
 import { RecipeFilters } from "@/features/filter-recipes";
-import { RecipeCard, demoRecipes } from "@/entities/recipe";
+import { buttonStyles } from "@/shared/ui";
 
-export function HomePage() {
+export async function HomePage() {
+  const session = await getSession();
+  const recipes = session ? await getFamilyRecipes(session.familyId) : [];
+
   return (
     <div className="flex flex-col gap-5">
       <input
@@ -12,15 +19,20 @@ export function HomePage() {
 
       <RecipeFilters />
 
-      <div className="grid grid-cols-2 gap-3">
-        {demoRecipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
-      </div>
-
-      <p className="pt-1 text-center text-xs text-ink/45">
-        Демо-данные. На этапе 1 подключим базу и реальные рецепты.
-      </p>
+      {recipes.length === 0 ? (
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-ink/15 px-6 py-12 text-center">
+          <p className="text-ink/60">Пока нет рецептов. Добавьте первое блюдо.</p>
+          <Link href="/recipes/new" className={buttonStyles("primary")}>
+            ＋ Новое блюдо
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          {recipes.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

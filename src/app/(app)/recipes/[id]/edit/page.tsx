@@ -5,6 +5,6 @@ export default async function Page({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await params; // на этапе 1 загрузим блюдо по id
-  return <RecipeFormPage mode="edit" />;
+  const { id } = await params;
+  return <RecipeFormPage mode="edit" recipeId={id} />;
 }
