@@ -1,1 +1,1 @@
-export { RecipeFilters } from "./ui/recipe-filters";
+export { RecipeBrowser } from "./ui/recipe-browser";
