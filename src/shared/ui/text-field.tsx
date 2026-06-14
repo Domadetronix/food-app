@@ -4,8 +4,10 @@ export const fieldLabelClass =
   "text-sm font-semibold uppercase tracking-wide text-ink/50";
 
 // text-base (16px), чтобы iOS не зумил экран при фокусе на поле.
-export const inputClass =
-  "h-11 w-full rounded-xl border border-ink/15 bg-cream px-3.5 text-base outline-none placeholder:text-ink/40 focus:border-terracotta";
+// inputBase — без ширины (для инпутов внутри flex-рядов); inputClass — на всю ширину.
+export const inputBase =
+  "h-11 rounded-xl border border-ink/15 bg-cream px-3.5 text-base outline-none placeholder:text-ink/40 focus:border-terracotta";
+export const inputClass = `w-full ${inputBase}`;
 
 function FieldLabel({ label, required }: { label: string; required?: boolean }) {
   return (

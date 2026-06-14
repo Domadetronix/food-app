@@ -31,10 +31,14 @@ export async function saveRecipeAction(
   const cookRaw = String(formData.get("cookTime") ?? "").trim();
   const cookTimeMinutes = cookRaw ? Math.max(0, Math.trunc(Number(cookRaw))) || null : null;
   const mealTypes = formData.getAll("mealTypes").map(String);
-  const tags = String(formData.get("tags") ?? "")
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
+  const tags = Array.from(
+    new Set(
+      formData
+        .getAll("tag")
+        .map((t) => String(t).trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  );
 
   const ingNames = formData.getAll("ingName").map(String);
   const ingAmounts = formData.getAll("ingAmount").map(String);

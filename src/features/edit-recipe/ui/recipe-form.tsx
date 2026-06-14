@@ -7,11 +7,12 @@ import {
   TextArea,
   TextField,
   fieldLabelClass,
-  inputClass,
+  inputBase,
 } from "@/shared/ui";
 import { resizeImage } from "@/shared/lib/image/resize";
 import type { Recipe, MealType } from "@/entities/recipe";
 import { saveRecipeAction, type RecipeFormState } from "../api/actions";
+import { TagInput } from "./tag-input";
 
 const mealOptions: { value: MealType; label: string }[] = [
   { value: "breakfast", label: "Завтрак" },
@@ -107,14 +108,14 @@ export function RecipeForm({ mode, initial }: { mode: "new" | "edit"; initial?: 
                 name="ingName"
                 value={row.name}
                 onChange={(e) => setRow(i, "name", e.target.value)}
-                className={`${inputClass} flex-1`}
+                className={`${inputBase} min-w-0 flex-1`}
                 placeholder="Продукт"
               />
               <input
                 name="ingAmount"
                 value={row.amount}
                 onChange={(e) => setRow(i, "amount", e.target.value)}
-                className={`${inputClass} w-28`}
+                className={`${inputBase} w-24 shrink-0`}
                 placeholder="200 гр"
               />
               <button
@@ -167,18 +168,16 @@ export function RecipeForm({ mode, initial }: { mode: "new" | "edit"; initial?: 
           min={0}
           name="cookTime"
           defaultValue={initial?.cookTimeMinutes ?? ""}
-          className={`${inputClass} w-28`}
+          className={`${inputBase} w-28`}
           placeholder="25"
         />
       </div>
 
       {/* Теги */}
-      <TextField
-        label="Теги"
-        name="tags"
-        defaultValue={initial?.tags.join(", ") ?? ""}
-        placeholder="мясное, острое (через запятую)"
-      />
+      <div className="flex flex-col gap-1.5">
+        <span className={fieldLabelClass}>Теги</span>
+        <TagInput initial={initial?.tags ?? []} />
+      </div>
 
       {state?.error && <p className="text-sm text-terracotta">{state.error}</p>}
 
