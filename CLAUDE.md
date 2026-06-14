@@ -112,3 +112,6 @@ Push в `master` → **Vercel автоматически деплоит producti
 - `cookies()` из `next/headers` — **async**.
 - Конвенция middleware заменена на **`proxy.ts`** с экспортом функции `proxy`.
 - Tailwind v4 настраивается **в CSS** (`@theme` в `globals.css`), не через `tailwind.config`.
+- Поля ввода/`select`/`textarea` — **16px** (`text-base`), иначе iOS зумит экран при фокусе.
+- Перцептивная скорость: у динамических роутов есть `loading.tsx` со скелетонами. Новый
+  динамический экран — добавляй свой `loading.tsx`.
