@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { getSupabaseAdmin } from "@/shared/lib/supabase/server";
-import { generateCode, hashCode } from "@/shared/lib/auth/code";
+import { encryptCode, generateCode, hashCode } from "@/shared/lib/auth/code";
 import { createSession, clearSession } from "@/shared/lib/auth/session";
 
 export type AuthState = { error?: string; createdCode?: string };
@@ -29,7 +29,7 @@ async function createFamily(name: string): Promise<AuthState> {
     const code = generateCode();
     const { data, error } = await supabase
       .from("families")
-      .insert({ name, code_hash: hashCode(code) })
+      .insert({ name, code_hash: hashCode(code), code_encrypted: encryptCode(code) })
       .select("id")
       .single();
 

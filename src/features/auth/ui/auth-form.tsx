@@ -92,8 +92,8 @@ function CreatedPanel({ code }: { code: string }) {
       <span className="text-xs text-ink/55">{copied ? "Скопировано ✓" : "Нажмите на код, чтобы скопировать"}</span>
 
       <p className="text-xs text-ink/50">
-        Сохраните код и поделитесь им с близкими — по нему они войдут в семью. Посмотреть его
-        позже нельзя (хранится в виде хеша).
+        Поделитесь кодом с близкими — по нему они войдут в семью. Код всегда можно
+        посмотреть позже в настройках.
       </p>
 
       <Link href="/" className={buttonStyles("primary", "w-full")}>
