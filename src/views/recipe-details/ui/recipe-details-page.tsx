@@ -1,0 +1,75 @@
+import Link from "next/link";
+import { PlateIcon, Tag, buttonStyles } from "@/shared/ui";
+import { getDemoRecipe } from "@/entities/recipe";
+
+const mealLabels: Record<string, string> = {
+  breakfast: "Завтрак",
+  lunch: "Обед",
+  dinner: "Ужин",
+};
+
+export function RecipeDetailsPage({ id }: { id: string }) {
+  const recipe = getDemoRecipe(id);
+
+  return (
+    <div className="flex flex-col gap-5">
+      <Link href="/" className="text-sm text-ink/60 hover:text-ink">
+        ← К рецептам
+      </Link>
+
+      <div className="flex aspect-[16/10] items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-ink/5">
+        <PlateIcon className="h-14 w-14 text-gold" />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-semibold tracking-tight">{recipe.name}</h1>
+        <div className="flex flex-wrap items-center gap-2 text-sm text-ink/60">
+          {recipe.cookTimeMinutes != null && <span>~ {recipe.cookTimeMinutes} мин</span>}
+          {recipe.mealTypes.length > 0 && (
+            <>
+              <span>•</span>
+              <span>{recipe.mealTypes.map((m) => mealLabels[m]).join(", ")}</span>
+            </>
+          )}
+        </div>
+        {recipe.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {recipe.tags.map((t) => (
+              <Tag key={t}>{t}</Tag>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {recipe.description && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-ink/50">Рецепт и заметки</h2>
+          <p className="leading-relaxed text-ink/90">{recipe.description}</p>
+        </section>
+      )}
+
+      {recipe.ingredients.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-ink/50">Продукты</h2>
+          <ul className="overflow-hidden rounded-2xl border border-ink/10">
+            {recipe.ingredients.map((ing, i) => (
+              <li
+                key={ing.name}
+                className={`flex items-center justify-between px-4 py-2.5 text-sm ${
+                  i !== 0 ? "border-t border-ink/10" : ""
+                }`}
+              >
+                <span>{ing.name}</span>
+                <span className="text-ink/60">{ing.amount}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <Link href={`/recipes/${recipe.id}/edit`} className={buttonStyles("outline")}>
+        Редактировать
+      </Link>
+    </div>
+  );
+}

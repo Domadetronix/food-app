@@ -1,26 +1,29 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Палитра приложения — строго 4 цвета, без градиентов.
+  Допустимы только прозрачности (opacity) этих же цветов для границ, теней
+  и неактивных состояний. Другие цвета не используем.
+*/
+@theme {
+  --color-cream: #f9f6f1; /* основной фон */
+  --color-ink: #181b17; /* текст, иконки */
+  --color-terracotta: #d07e42; /* главный акцент: кнопки, активные элементы */
+  --color-gold: #b7ad76; /* вторичный акцент: теги, рамки */
+
+  --font-sans: var(--font-app-sans), system-ui, -apple-system, sans-serif;
+
+  --radius: 1rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
