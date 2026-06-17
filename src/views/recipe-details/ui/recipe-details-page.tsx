@@ -4,6 +4,7 @@ import { PlateIcon, Tag, buttonStyles } from "@/shared/ui";
 import { getSession } from "@/shared/lib/auth/session";
 import { getFamilyRecipe } from "@/entities/recipe/api/queries";
 import { DeleteRecipeButton } from "@/features/edit-recipe";
+import { ScheduleRecipeButton } from "@/features/plan-meals";
 
 const mealLabels: Record<string, string> = {
   breakfast: "Завтрак",
@@ -82,6 +83,7 @@ export async function RecipeDetailsPage({ id }: { id: string }) {
       )}
 
       <div className="flex flex-col gap-2 pt-1">
+        <ScheduleRecipeButton recipeId={recipe.id} />
         <Link href={`/recipes/${recipe.id}/edit`} className={buttonStyles("outline", "w-full")}>
           Редактировать
         </Link>

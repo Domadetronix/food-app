@@ -178,18 +178,25 @@ function DayPicker({
         </div>
 
         {entries.length > 0 ? (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-col gap-2">
             {entries.map((e) => (
-              <button
-                key={e.id}
-                type="button"
-                disabled={pending}
-                onClick={() => remove(e.id)}
-                className="inline-flex items-center gap-1 rounded-full bg-terracotta px-3 py-1 text-sm text-cream disabled:opacity-60"
-              >
-                {e.recipeName}
-                <span className="text-cream/80">×</span>
-              </button>
+              <div key={e.id} className="flex items-center gap-1 rounded-xl border border-ink/10 pl-3">
+                <Link
+                  href={`/recipes/${e.recipeId}`}
+                  className="flex-1 truncate py-2.5 text-sm font-medium hover:text-terracotta"
+                >
+                  {e.recipeName}
+                </Link>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() => remove(e.id)}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg text-ink/40 hover:bg-ink/5 hover:text-terracotta disabled:opacity-60"
+                  aria-label="Убрать из плана"
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
         ) : (

@@ -15,14 +15,14 @@ export function BottomNav() {
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-ink/10 bg-cream/95 backdrop-blur">
-      <div className="mx-auto flex max-w-2xl items-stretch justify-around px-2">
+      <div className="mx-auto flex h-16 max-w-2xl items-stretch justify-around px-2">
         {items.map(({ href, label, icon: Icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs transition-colors ${
+              className={`flex flex-1 flex-col items-center justify-center gap-1 text-xs transition-colors ${
                 active ? "text-terracotta" : "text-ink/55 hover:text-ink"
               }`}
             >
