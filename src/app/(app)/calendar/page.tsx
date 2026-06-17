@@ -1,5 +1,10 @@
 import { CalendarPage } from "@/views/calendar";
 
-export default function Page() {
-  return <CalendarPage />;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ month?: string }>;
+}) {
+  const { month } = await searchParams;
+  return <CalendarPage month={month} />;
 }

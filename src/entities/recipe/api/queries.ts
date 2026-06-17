@@ -68,6 +68,19 @@ export async function getFamilyRecipe(familyId: string, id: string): Promise<Rec
   };
 }
 
+/** Лёгкий список рецептов семьи (id + name) — для выбора, без фото/подписанных URL. */
+export async function getFamilyRecipeOptions(
+  familyId: string,
+): Promise<{ id: string; name: string }[]> {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from("recipes")
+    .select("id, name")
+    .eq("family_id", familyId)
+    .order("name", { ascending: true });
+  return data?.map((r) => ({ id: r.id as string, name: r.name as string })) ?? [];
+}
+
 async function signedUrlMap(paths: string[]): Promise<Record<string, string>> {
   if (paths.length === 0) return {};
   const supabase = getSupabaseAdmin();
